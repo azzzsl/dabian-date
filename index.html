@@ -13,11 +13,11 @@
     align-items: center;
     background: #91CFD5;
     color: #113056;
-    font-family: 'Segoe UI', sans-serif;
+   font-family: "汇文明朝体GBK", "Noto Serif SC", "宋体", serif;
     flex-direction: column;
   }
   #countdown {
-    font-size: clamp(2.5rem, 15vw, 6rem);
+    font-size: clamp(3rem, 15vw, 6rem);
     font-weight: bold;
     letter-spacing: 2px;
   }
@@ -29,11 +29,11 @@
 </style>
 </head>
 <body>
-<div class="label">距离答辩还有</div>
+<div class="label">距离教资面试还有</div>
 <div id="countdown"></div>
 <script>
   // 🎯 把这里改成你的答辩日期（格式：年-月-日）
-  const targetDateStr = "2026-05-15";
+  const targetDateStr = "2026-05-16";
 
   function updateCountdown() {
     const now = new Date();
@@ -47,7 +47,7 @@
     if (days > 0) {
       display.textContent = days + " 天";
     } else if (days === 0) {
-      display.textContent = "🎉 就是今天！";
+      display.textContent = " 今天！";
     } else {
       display.textContent = "已过 " + Math.abs(days) + " 天";
     }
