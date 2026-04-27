@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>答辩倒计时</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #91CFD5;
+    color: #113056;
+    font-family: 'Segoe UI', sans-serif;
+    flex-direction: column;
+  }
+  #countdown {
+    font-size: clamp(2.5rem, 15vw, 6rem);
+    font-weight: bold;
+    letter-spacing: 2px;
+  }
+  .label {
+    font-size: 1.5rem;
+    opacity: 0.85;
+    margin-bottom: 0.8rem;
+  }
+</style>
+</head>
+<body>
+<div class="label">距离答辩还有</div>
+<div id="countdown"></div>
+<script>
+  // 🎯 把这里改成你的答辩日期（格式：年-月-日）
+  const targetDateStr = "2026-05-15";
+
+  function updateCountdown() {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const target = new Date(targetDateStr + "T00:00:00");
+
+    const diffTime = target.getTime() - today.getTime();
+    const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    const display = document.getElementById("countdown");
+    if (days > 0) {
+      display.textContent = days + " 天";
+    } else if (days === 0) {
+      display.textContent = "🎉 就是今天！";
+    } else {
+      display.textContent = "已过 " + Math.abs(days) + " 天";
+    }
+  }
+
+  updateCountdown();
+  // 每天凌晨自动刷新显示（不需要每秒跳动）
+  setInterval(updateCountdown, 60 * 60 * 1000);
+</script>
+</body>
+</html>
