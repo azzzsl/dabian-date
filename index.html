@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>答辩倒计时</title>
+<title>倒计时</title>
 <style>
   body {
     margin: 0;
@@ -11,10 +11,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    /* 默认配色会被 JavaScript 覆盖 */
     background-color: rgba(145,207,213,0.5);
     color: #113056;
-   font-family: "汇文明朝体GBK", "Noto Serif SC", "宋体", serif;
+    font-family: "汇文明朝体GBK", "Noto Serif SC", "宋体", serif;
     flex-direction: column;
+    transition: background-color 0.3s, color 0.3s;
   }
   #countdown {
     font-size: clamp(3rem, 15vw, 6rem);
@@ -29,33 +31,54 @@
 </style>
 </head>
 <body>
-<div class="label">距离终稿提交还有</div>
+<div class="label" id="eventTitle">距离终稿提交还有</div>
 <div id="countdown"></div>
+
 <script>
-  // 🎯 把这里改成你的答辩日期（格式：年-月-日）
-  const targetDateStr = "2026-06-03";
+  (function() {
+    const params = new URLSearchParams(window.location.search);
 
-  function updateCountdown() {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const target = new Date(targetDateStr + "T00:00:00");
+    // 1. 读取标题（默认文案）
+    const title = params.get('title') || '距离终稿提交还有';
+    document.getElementById('eventTitle').textContent = title;
 
-    const diffTime = target.getTime() - today.getTime();
-    const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    // 2. 读取日期（默认值 2026-06-03）
+    const targetDateStr = params.get('date') || '2026-06-03';
 
-    const display = document.getElementById("countdown");
-    if (days > 0) {
-      display.textContent = days + " 天";
-    } else if (days === 0) {
-      display.textContent = " 今天！";
-    } else {
-      display.textContent = "已过 " + Math.abs(days) + " 天";
+    // 3. 读取背景色（支持 Hex 或 rgba 等，注意 URL 编码）
+    const bg = params.get('bg');
+    if (bg) {
+      document.body.style.backgroundColor = decodeURIComponent(bg);
     }
-  }
 
-  updateCountdown();
-  // 每天凌晨自动刷新显示（不需要每秒跳动）
-  setInterval(updateCountdown, 60 * 60 * 1000);
+    // 4. 读取文字颜色
+    const color = params.get('color');
+    if (color) {
+      document.body.style.color = decodeURIComponent(color);
+    }
+
+    // 5. 倒计时逻辑（精确到天）
+    function updateCountdown() {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const target = new Date(targetDateStr + "T00:00:00");
+
+      const diffTime = target.getTime() - today.getTime();
+      const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      const display = document.getElementById("countdown");
+      if (days > 0) {
+        display.textContent = days + " 天";
+      } else if (days === 0) {
+        display.textContent = " 今天！";
+      } else {
+        display.textContent = "已过 " + Math.abs(days) + " 天";
+      }
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 60 * 60 * 1000);
+  })();
 </script>
 </body>
 </html>
